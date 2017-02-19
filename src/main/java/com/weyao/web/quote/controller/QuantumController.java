@@ -27,6 +27,12 @@ public class QuantumController extends BaseController {
         String menu = "{\"menu\": [{\"text\": \"欢迎页面\",\"sref\": \"app.welcome\",\"icon\": \"icon-tag\"},{\"text\": \"二级菜单\",\"sref\": \"#\",\"icon\": \"fa fa-shield\",\"submenu\": [{\"text\": \"测试\", \"sref\" : \"app.test\"}],\"alert\": \"\",\"label\": \"label label-primary\"}]}";
         return ResponseUtils.succ(menu);
     }
+    @ResponseBody
+    @RequestMapping(value = "/test1.xhtml", produces = "application/json;charset=utf-8")
+    public Object test1(HttpServletRequest request, HttpServletResponse response) throws TException {
+
+        return ResponseUtils.succ("ok i'm test1.xhtml");
+    }
 
     @ResponseBody
     @RequestMapping(value = "/login.xhtml", produces = "application/json;charset=utf-8")
