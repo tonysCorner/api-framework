@@ -28,10 +28,9 @@ public class QuantumController extends BaseController {
         return ResponseUtils.succ(menu);
     }
     @ResponseBody
-    @RequestMapping(value = "/test1.xhtml", produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/test2.xhtml", produces = "application/json;charset=utf-8")
     public Object test1(HttpServletRequest request, HttpServletResponse response) throws TException {
-
-        return ResponseUtils.succ("ok i'm test1.xhtml");
+        return ResponseUtils.succ("ok i'm test2.xhtml");
     }
 
     @ResponseBody
