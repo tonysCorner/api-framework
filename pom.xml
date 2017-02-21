@@ -22,12 +22,12 @@
     <repository>
       <id>releases</id>
       <name>Central Code Repository</name>
-      <url>http://101.37.18.181:8081/nexus/content/groups/public/</url>
+      <url>http://m2.internal.godmn.com:8081/nexus/content/groups/public/</url>
     </repository>
     <repository>
       <id>snapshots</id>
       <name>snapshots Code Repository</name>
-      <url>http://101.37.18.181:8081/nexus/content/groups/public-snapshots/</url>
+      <url>http://m2.internal.godmn.com:8081/nexus/content/groups/public-snapshots/</url>
       <snapshots>
         <enabled>true</enabled>
         <updatePolicy>always</updatePolicy>
