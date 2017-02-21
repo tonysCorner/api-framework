@@ -1,4 +1,4 @@
-package com.weyao.web.quote.util;
+package com.godmn.framework.util;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;

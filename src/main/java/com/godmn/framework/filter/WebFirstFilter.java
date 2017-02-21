@@ -1,7 +1,5 @@
-package com.weyao.web.quote.filter;
+package com.godmn.framework.filter;
 
-
-import static com.weyao.web.quote.Constants.COOKIE_SESSION_ID_KEY;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -19,6 +17,9 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.godmn.framework.Constants;
+import com.godmn.framework.exception.CodeMsgDef;
+import com.godmn.framework.resp.ResponseUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -29,12 +30,10 @@ import com.weyao.api.controller.XssFilterRequestWrapper;
 import com.weyao.api.util.WebUtil;
 import com.weyao.common.CookieHelper;
 import com.weyao.common.JsonHelper;
-import com.weyao.srv.XLogSrv;
 import com.weyao.srv.info.LogsWebLog;
-import com.weyao.web.quote.resp.Response;
-import com.weyao.web.quote.resp.ResponseUtils;
-import com.weyao.web.quote.resp.Ret;
-import com.weyao.web.quote.util.StrUtil;
+import com.godmn.framework.resp.Response;
+import com.godmn.framework.resp.Ret;
+import com.godmn.framework.util.StrUtil;
 
 import net.sf.json.JSONObject;
 import org.apache.commons.collections.CollectionUtils;
@@ -79,7 +78,7 @@ public class WebFirstFilter implements Filter {
 			String XRequestedWith=request.getHeader("X-Requested-With");
 			logger.debug("auth check failed servletPath: "+servletPath+", XRequestedWith: "+XRequestedWith);
 			if(XRequestedWith!=null && XRequestedWith.equalsIgnoreCase("XMLHttpRequest")){
-				Response ret = ResponseUtils.instance(Ret.ERROR_AUTH.code, Ret.ERROR_AUTH.msg);
+				Response ret = ResponseUtils.instance(CodeMsgDef.系统错误);
 				response.setContentType("application/json;charset="+URL_CHARSET);
 				response.getWriter().write(JsonHelper.toJson(ret));
 				return;
@@ -186,7 +185,7 @@ public class WebFirstFilter implements Filter {
 	
 	protected long checkLogin(HttpServletRequest request,
 			HttpServletResponse response)throws IOException, ServletException{
-		String ssid=CookieHelper.getCookieValue(request, COOKIE_SESSION_ID_KEY);
+		String ssid=CookieHelper.getCookieValue(request, Constants.COOKIE_SESSION_ID_KEY);
 		if(ssid==null){
 			return 0;
 		}

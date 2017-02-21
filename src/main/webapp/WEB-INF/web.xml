@@ -5,34 +5,6 @@
 		 xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" 
 		 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
 		 http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" metadata-complete="true" >
-  <!--<filter>-->
-    <!--<filter-name>CORS</filter-name>-->
-    <!--<filter-class>com.thetransactioncompany.cors.CORSFilter</filter-class>-->
-    <!--<init-param>-->
-      <!--<param-name>cors.allowOrigin</param-name>-->
-      <!--<param-value>*</param-value>-->
-    <!--</init-param>-->
-    <!--<init-param>-->
-      <!--<param-name>cors.supportedMethods</param-name>-->
-      <!--<param-value>GET,POST,HEAD,PUT,DELETE</param-value>-->
-    <!--</init-param>-->
-    <!--<init-param>-->
-      <!--<param-name>cors.supportedHeaders</param-name>-->
-      <!--<param-value>Content-Type, Access-Control-Allow-Headers,Authorization, X-Requested-With, Last-Modified, If-Modified-Since</param-value>-->
-    <!--</init-param>-->
-    <!--<init-param>-->
-      <!--<param-name>cors.exposedHeaders</param-name>-->
-      <!--<param-value>Set-Cookie</param-value>-->
-    <!--</init-param>-->
-    <!--<init-param>-->
-      <!--<param-name>cors.supportsCredentials</param-name>-->
-      <!--<param-value>true</param-value>-->
-    <!--</init-param>-->
-  <!--</filter>-->
-  <!--<filter-mapping>-->
-    <!--<filter-name>CORS</filter-name>-->
-    <!--<url-pattern>*.xhtml</url-pattern>-->
-  <!--</filter-mapping>-->
   <filter>
     <filter-name>Set Character Encoding</filter-name>
     <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
@@ -63,8 +35,7 @@
     <init-param>
       <param-name>allowOriginDomain</param-name>
       <param-value>
-        http://lxj.dev.api.1234ye.com:9001,
-        http://lxj.dev.api.1234ye.com:9002
+        http://lxj.dev.api.1234ye.com:9001
       </param-value>
     </init-param>
   <!--   <init-param>

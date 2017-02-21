@@ -1,4 +1,4 @@
-package com.weyao.web.quote.resp;
+package com.godmn.framework.resp;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
