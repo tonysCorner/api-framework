@@ -1,5 +1,5 @@
 
-package com.weyao.web.quote;
+package com.godmn.framework;
 
 
 

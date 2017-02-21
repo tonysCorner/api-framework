@@ -1,4 +1,4 @@
-package com.weyao.web.quote.util;
+package com.godmn.framework.util;
 
 public class StrUtil {
     public StrUtil() {
