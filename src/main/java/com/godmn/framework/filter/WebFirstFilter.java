@@ -30,7 +30,6 @@ import com.weyao.api.controller.XssFilterRequestWrapper;
 import com.weyao.api.util.WebUtil;
 import com.weyao.common.CookieHelper;
 import com.weyao.common.JsonHelper;
-import com.weyao.srv.info.LogsWebLog;
 import com.godmn.framework.resp.Response;
 import com.godmn.framework.resp.Ret;
 import com.godmn.framework.util.StrUtil;
@@ -39,22 +38,22 @@ import net.sf.json.JSONObject;
 import org.apache.commons.collections.CollectionUtils;
 
 /**
- * 
+ *
  */
 @Component("firstFilter")
 public class WebFirstFilter implements Filter {
 	private static final Log logger = LogFactory.getLog(WebFirstFilter.class);
-	
+
 	private static final String URL_CHARSET="utf-8";
-	
+
 	private Set<String> noChecks = new HashSet<String>();
 	private Set<String> allowOriginDomain =  new HashSet<String>();
-	
+
 	private String loginUrl;
-	
+
 	@Override
 	public void destroy() {
-		
+
 	}
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse resp,
@@ -93,22 +92,17 @@ public class WebFirstFilter implements Filter {
 				return;
 			}
 		}
-		
-		LogsWebLog logsWebLog=new LogsWebLog();
-        logsWebLog.setRequestTime(System.currentTimeMillis());
+
         HttpServletResponseCopier respCopier = new HttpServletResponseCopier(response);
         filterChain.doFilter(req, respCopier);
         try {
             respCopier.flushBuffer();
-            logsWebLog.setApiName("web-quote");
             String url = request.getRequestURL().toString();
             String uri = getUri(request);
             if (StringUtils.isNotBlank(uri)) {
                 url = url + "?" + uri;
             }
-            logsWebLog.setRequest(url);
             String realIp = WebUtil.getRealIp(request);
-            logsWebLog.setIp(realIp);
             String XRequestedWith = request.getHeader("X-Requested-With");
             String contentType = response.getContentType();
             String responseStr = null;
@@ -131,14 +125,12 @@ public class WebFirstFilter implements Filter {
             if (responseStr != null && responseStr.getBytes().length > 900) {
                 responseStr = StrUtil.substring(responseStr, 900, "");
             }
-            logsWebLog.setResponse(response.getStatus() + ": " + responseStr);
-            logsWebLog.setResponseTime(System.currentTimeMillis());
         } catch (Exception e) {
             logger.error(String.format("保存日志失败：【%s】",e.getMessage()),e);
         }
 	}
 
-	
+
 	public static String getUri(ServletRequest req){
 		try {
 			Map<String, String[]> parameMap = null;
@@ -161,7 +153,7 @@ public class WebFirstFilter implements Filter {
 		}
 		return "";
 	}
-	
+
 	private static String buildParame(Entry<String, String[]> entry){
 		try {
 			if (entry != null) {
@@ -182,13 +174,13 @@ public class WebFirstFilter implements Filter {
 		}
 		return "";
 	}
-	
+
 	protected long checkLogin(HttpServletRequest request,
 			HttpServletResponse response)throws IOException, ServletException{
-		String ssid=CookieHelper.getCookieValue(request, Constants.COOKIE_SESSION_ID_KEY);
+		/*String ssid=CookieHelper.getCookieValue(request, Constants.COOKIE_SESSION_ID_KEY);
 		if(ssid==null){
 			return 0;
-		}
+		}*/
 		//TODO jedisService replace
 		/*String token=jedisService.valueOps.get(String.format(KEY_SESSION_ID,ssid));
 		if(token!=null){
@@ -196,10 +188,10 @@ public class WebFirstFilter implements Filter {
 			jedisService.valueOps.getOperations().expire(String.format(KEY_SESSION_ID,ssid), SESSION_TIMEOUT, TimeUnit.SECONDS);
 			return setCustomer(request, token);
 		}*/
-		
+
 		return 0;
 	}
-	
+
 	protected long setCustomer(ServletRequest req, String token) {
 		/*String cusJson = null ;
 		try{
@@ -216,13 +208,13 @@ public class WebFirstFilter implements Filter {
 		}*/
 		return 0;
 	}
-	
-	protected boolean isAccessUri(String uri) {   
+
+	protected boolean isAccessUri(String uri) {
 		if (noChecks == null || noChecks.size() <= 0){
 			return true;
 		}
-		
-		if (StringUtils.isBlank(uri)){ 
+
+		if (StringUtils.isBlank(uri)){
 			return false;
 		}
 		for(String noCheck: noChecks){
@@ -230,7 +222,7 @@ public class WebFirstFilter implements Filter {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
 
@@ -254,8 +246,8 @@ public class WebFirstFilter implements Filter {
 			}
 		}
 	}
-	
-	
+
+
 	public void init(FilterConfig config) throws ServletException {
 		String noCheckStr = config.getInitParameter("nocheck");
 		if (StringUtils.isNotBlank(noCheckStr)) {
