@@ -25,7 +25,7 @@
       <url>http://47.93.30.112:8081/nexus/content/groups/public/</url>
     </repository>
     <repository>
-      <id>snapshots</id>
+      <id>public-snapshots</id>
       <name>snapshots Code Repository</name>
       <url>http://47.93.30.112:8081/nexus/content/groups/public-snapshots/</url>
       <snapshots>
@@ -44,7 +44,7 @@
       <url>http://m2.internal.weyao.com/nexus/content/repositories/com.weyao.repository/</url>
     </repository>
     <snapshotRepository>
-      <id>snapshots</id>
+      <id>public-snapshots</id>
       <name>Internal Snapshots</name>
       <url>http://m2.internal.weyao.com/nexus/content/repositories/com.weyao.repositories.snapshots/</url>
     </snapshotRepository>
