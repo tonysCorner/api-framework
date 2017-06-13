@@ -35,7 +35,10 @@
     <init-param>
       <param-name>allowOriginDomain</param-name>
       <param-value>
-        http://lxj.dev.api.1234ye.com:9001
+        http://lxj.dev.api.1234ye.com:9001,
+        http://lxj.api.dev.1234ye.com:9001,
+        http://www.godmn.com,
+        https://www.godmn.com
       </param-value>
     </init-param>
   <!--   <init-param>
