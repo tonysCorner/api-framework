@@ -18,6 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.godmn.framework.Constants;
+import com.godmn.framework.controller.HttpServletResponseCopier;
+import com.godmn.framework.controller.XssFilterRequestWrapper;
 import com.godmn.framework.exception.CodeMsgDef;
 import com.godmn.framework.resp.ResponseUtils;
 import org.apache.commons.lang.StringUtils;
@@ -25,9 +27,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Component;
 
-import com.weyao.api.controller.HttpServletResponseCopier;
-import com.weyao.api.controller.XssFilterRequestWrapper;
-import com.weyao.api.util.WebUtil;
 import com.weyao.common.CookieHelper;
 import com.weyao.common.JsonHelper;
 import com.godmn.framework.resp.Response;
@@ -102,7 +101,7 @@ public class WebFirstFilter implements Filter {
             if (StringUtils.isNotBlank(uri)) {
                 url = url + "?" + uri;
             }
-            String realIp = WebUtil.getRealIp(request);
+            String realIp = getRealIp(request);
             String XRequestedWith = request.getHeader("X-Requested-With");
             String contentType = response.getContentType();
             String responseStr = null;
@@ -190,6 +189,30 @@ public class WebFirstFilter implements Filter {
 		}*/
 
 		return 0;
+	}
+
+	private static String getRealIp(HttpServletRequest request) {
+		String ip = request.getHeader("x-forwarded-for");
+		if (ip != null && ip.contains(",")) {
+			ip = ip.substring(0, ip.indexOf(","));
+		}
+		if (StringUtils.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getHeader("X-Real-IP");
+		}
+
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getHeader("Proxy-Client-IP");
+		}
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getHeader("WL-Proxy-Client-IP");
+		}
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getRemoteAddr();
+		}
+		// 如果是本地测试或以上步骤没有取得ip没从请求参数中获取IP
+		if (("127.0.0.1".equals(ip) || StringUtils.isEmpty(ip)) && !StringUtils.isEmpty(request.getParameter("ip")))
+			ip = request.getParameter("ip");
+		return ip;
 	}
 
 	protected long setCustomer(ServletRequest req, String token) {

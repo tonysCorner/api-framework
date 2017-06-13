@@ -7,7 +7,7 @@ package com.godmn.framework.exception;
 public class ErrorSrvException extends SrvException {
 	private static final long serialVersionUID = -1313562990144781950L;
 
-	public ErrorSrvException(com.weyao.exception.SrvException e){
+	public ErrorSrvException(SrvException e){
 		super(e.getServiceId(),e.getCode(),e.getMsg());
 	}
 
