@@ -8,7 +8,6 @@ import com.godmn.framework.mail.MailService;
 import com.godmn.framework.resp.ResponseUtils;
 import com.godmn.framework.service.SaleService;
 import org.apache.commons.lang.StringUtils;
-import org.apache.thrift.TException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +42,7 @@ public class FrameworkController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/test.xhtml", produces = "application/json;charset=utf-8")
-    public Object test(HttpServletRequest request, HttpServletResponse response) throws TException, IOException {
+    public Object test(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         String menu = "{\"menu\": [{\"text\": \"欢迎页面\",\"sref\": \"app.welcome\",\"icon\": \"icon-tag\"},{\"text\": \"二级菜单\",\"sref\": \"#\",\"icon\": \"fa fa-shield\",\"submenu\": [{\"text\": \"测试\", \"sref\" : \"app.test\"}],\"alert\": \"\",\"label\": \"label label-primary\"}]}";
         //mailService.sendMail("你好", "asd-7298@qq.com", "朋友好久不见", "/Users/lixingjian/Desktop/project/static/product/images/bg.png", "http://1234ye.com/img/H5_main_banner_2.jpg");
