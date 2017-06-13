@@ -1,4 +1,4 @@
-package com.godmn.framework.resp;//
+package com.godmn.framework.resp;
 
 
 import com.godmn.framework.exception.CodeMsg;
