@@ -49,6 +49,15 @@ public class FrameworkController extends BaseController {
         return ResponseUtils.succ(menu);
     }
     @ResponseBody
+    @RequestMapping(value = "/test2.xhtml", produces = "application/json;charset=utf-8")
+    public Object test2(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        String menu = "{\"menu\": [{\"text\": \"欢迎页面\",\"sref\": \"app.welcome\",\"icon\": \"icon-tag\"},{\"text\": \"二级菜单\",\"sref\": \"#\",\"icon\": \"fa fa-shield\",\"submenu\": [{\"text\": \"测试\", \"sref\" : \"app.test\"}],\"alert\": \"\",\"label\": \"label label-primary\"}]}";
+        //mailService.sendMail("你好", "asd-7298@qq.com", "朋友好久不见", "/Users/lixingjian/Desktop/project/static/product/images/bg.png", "http://1234ye.com/img/H5_main_banner_2.jpg");
+        return ResponseUtils.succ(menu);
+    }
+
+    @ResponseBody
     @RequestMapping(value = "/listSaleInfo.xhtml")
     public Object listSaleInfo(HttpServletRequest request, HttpServletResponse response,
                                @RequestParam(value = "name", required = false, defaultValue = "") String name,
