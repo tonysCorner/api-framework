@@ -1,6 +1,7 @@
 package com.godmn.framework.controller;
 
 
+import com.godmn.framework.Constants;
 import com.godmn.framework.common.PageBean;
 import com.godmn.framework.entity.Sale;
 import com.godmn.framework.exception.SrvException;
@@ -14,6 +15,7 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,11 +23,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -45,6 +47,9 @@ public class FrameworkController extends BaseController {
     @Autowired
     MailService mailService;
 
+    @Value("${weather.appcode}")
+    private String weatherAppCode;
+
     @ResponseBody
     @RequestMapping(value = "/test.xhtml", produces = "application/json;charset=utf-8")
     public Object test(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -53,16 +58,16 @@ public class FrameworkController extends BaseController {
         //mailService.sendMail("你好", "asd-7298@qq.com", "朋友好久不见", "/Users/lixingjian/Desktop/project/static/product/images/bg.png", "http://1234ye.com/img/H5_main_banner_2.jpg");
         return ResponseUtils.succ(menu);
     }
+
     @ResponseBody
     @RequestMapping(value = "/weather.xhtml", produces = "application/json;charset=utf-8")
     public Object weather(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String host = "http://saweather.market.alicloudapi.com";
         String path = "/hour24";
         String method = "GET";
-        String appcode = "904017e9224346f1b18db4dcb09e9f93";
+        //String appcode = "904017e9224346f1b18db4dcb09e9f93";
         Map<String, String> headers = new HashMap<String, String>();
         //最后在header中的格式(中间是英文空格)为Authorization:APPCODE 83359fd73fe94948385f570e3c139105
-        headers.put("Authorization", "APPCODE " + appcode);
+        headers.put("Authorization", "APPCODE " + weatherAppCode);
         Map<String, String> querys = new HashMap<String, String>();
         querys.put("area", "上海");
         querys.put("areaid", "101020100");
@@ -77,7 +82,8 @@ public class FrameworkController extends BaseController {
              * 相应的依赖请参照
              * https://github.com/aliyun/api-gateway-demo-sign-java/blob/master/pom.xml
              */
-            HttpResponse res = HttpUtils.doGet(host, path, method, headers, querys);
+            logger.info("API --- weather:APPCODE=" + weatherAppCode  + ",weatherApi=" + Constants.WEATHER_API);
+            HttpResponse res = HttpUtils.doGet(Constants.WEATHER_API, path, method, headers, querys);
             //获取response的body
             String resBody = EntityUtils.toString(res.getEntity());
             return ResponseUtils.succ(resBody);
@@ -86,6 +92,88 @@ public class FrameworkController extends BaseController {
         }
 
         return ResponseUtils.succ("");
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/listSongs.xhtml", produces = "application/json;charset=utf-8")
+    public Object listSongs(@RequestParam(value = "type", required = true, defaultValue = "1") String type,
+                            @RequestParam(value = "size", required = true, defaultValue = "10") String size,
+            HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String method = "GET";
+        Map<String, String> querys = new HashMap<String, String>();
+        querys.put("format", "json");
+        querys.put("method", "baidu.ting.billboard.billList");
+        querys.put("type", type);
+        querys.put("size", size);
+
+        logger.info("API --- weather:type=" + type  + ",MUSIC_API=" + Constants.MUSIC_API + ",size=" + size);
+        HttpResponse res = HttpUtils.doGet(Constants.MUSIC_API, "", method, new HashMap<String, String>(), querys);
+        //获取response的body
+        String resBody = EntityUtils.toString(res.getEntity());
+        return ResponseUtils.succ(resBody);
+
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/getSongBySongId.xhtml", produces = "application/json;charset=utf-8")
+    public Object getSongBySongid(@RequestParam(value = "songId", required = true, defaultValue = "1") String songId,
+                            HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String method = "GET";
+        Map<String, String> querys = new HashMap<String, String>();
+        querys.put("format", "json");
+        querys.put("method", "baidu.ting.song.play");
+        querys.put("songid", songId);
+
+        logger.info("API --- weather:MUSIC_API=" + Constants.MUSIC_API + ",songId=" + songId);
+        HttpResponse res = HttpUtils.doGet(Constants.MUSIC_API, "", method, new HashMap<String, String>(), querys);
+        //获取response的body
+        String resBody = EntityUtils.toString(res.getEntity());
+        return ResponseUtils.succ(resBody);
+
+    }
+
+
+
+    @RequestMapping("/playMusic.xhtml")
+    public void exportExchange(@RequestParam(value = "songUrl", required = true) String songUrl,
+                               @RequestParam(value = "songName", required = true) String songName,
+                               HttpServletResponse response) throws Exception {
+
+        BufferedInputStream bis = null;
+        BufferedOutputStream bos = null;
+
+        try {
+            response.setContentType("application/octet-stream");
+            response.reset();//清除response中的缓存
+
+            URL url = new URL(songUrl);
+
+            //获取此路径的连接
+            URLConnection conn = url.openConnection();
+
+            Long fileLength = conn.getContentLengthLong();//获取文件大小
+
+            //设置reponse响应头，真实文件名重命名，就是在这里设置，设置编码
+            response.setHeader("Content-disposition",
+                    "attachment; filename=" + new String(songUrl.getBytes("utf-8"), "ISO8859-1"));
+            response.setHeader("Content-Length", String.valueOf(fileLength));
+
+            bis = new BufferedInputStream(conn.getInputStream());//构造读取流
+            bos = new BufferedOutputStream(response.getOutputStream());//构造输出流
+
+            byte[] buff = new byte[1024];
+            int bytesRead;
+            //每次读取缓存大小的流，写到输出流
+            while (-1 != (bytesRead = bis.read(buff, 0, buff.length))) {
+                bos.write(buff, 0, bytesRead);
+            }
+            response.flushBuffer();//将所有的读取的流返回给客户端
+            bis.close();
+            bos.close();
+        } catch (IOException e) {
+
+        }
+
     }
 
     @ResponseBody
