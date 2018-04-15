@@ -2,7 +2,6 @@ package com.godmn.framework.mail;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.*;
-import sun.misc.Regexp;
 
 import java.io.File;
 import java.net.URL;

@@ -265,7 +265,8 @@ public class WebFirstFilter implements Filter {
 				response.setHeader("Access-Control-Allow-Origin", domain);
 				response.setHeader("Access-Control-Allow-Credentials", "true");
 				response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
-				response.setHeader("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers,Authorization, X-Requested-With, Last-Modified, If-Modified-Since");
+				//response.setHeader("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers,Authorization, X-Requested-With, Last-Modified, If-Modified-Since");
+				response.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, X-HTTP-Method-Override, Cookie, AccessToken");
 			}
 		}
 	}
