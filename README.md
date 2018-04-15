@@ -7,3 +7,5 @@
 > 项目使用跨域资源共享(CORS)实现前后端分离
 
 > 使用该项目可以在开发者本地把hosts中的127.0.0.1 映射到lxj.dev.api.1234ye.com调用后端接口
+
+> mvn clean package -Denv=dev -Dmaven.test.skip=true
